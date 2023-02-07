@@ -4,12 +4,14 @@ import IndexScreen from "./src/screens/IndexScreen";
 import { Provider } from "./src/screens/context/BlogContext"; // default olarak dışa aktarmadığım için süslü parantez içinde yazmam lazım
 import ShowScreen from "./src/screens/ShowScreen";
 import CreateScreen from "./src/screens/CreateScreen";
+import EditScreen from "./src/screens/EditScreen";
 
 const navigator = createStackNavigator(
   {
     Index: IndexScreen,
     Show: ShowScreen,
     Create: CreateScreen,
+    Edit: EditScreen,
   },
   {
     initialRouteName: "Index",
