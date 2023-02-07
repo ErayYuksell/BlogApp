@@ -6,11 +6,12 @@ const ShowScreen = ({ navigation }) => {
   const { state } = useContext(Context);
   const blogPost = state.find(
     (blogPost) => blogPost.id == navigation.getParam("id")
+    //IndexScreen den yolladığım id nesnesi state deki blogpost id si ile eşleşen ilk elemanı tut demek bu
   );
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{blogPost.title}</Text>
-      <Text style={styles.text} >Blog Post id: {blogPost.id}</Text>
+      <Text style={styles.text}>Blog Post id: {blogPost.id}</Text>
     </View>
   );
 };
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     margin: 15,
-  }
+  },
 });
 
 export default ShowScreen;

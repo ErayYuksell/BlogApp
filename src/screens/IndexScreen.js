@@ -4,25 +4,23 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import { Context } from "./context/BlogContext";
 import { Entypo } from "@expo/vector-icons";
 
 const IndexScreen = ({ navigation }) => {
-  const { state, addBlogPost, deleteBlogPost } = useContext(Context);
+  const { state, deleteBlogPost } = useContext(Context);
 
   return (
     <View style={styles.head}>
-      <Button title="Add Post" onPress={addBlogPost} />
       <FlatList
         data={state}
         keyExtractor={(blogPost) => blogPost.title}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity
-              onPress={() => navigation.navigate("Show", { id: item.id })}
+              onPress={() => navigation.navigate("Show", { id: item.id })} //show ekranına giderken yanında id nesnesinide götürüyor
             >
               <View style={styles.container}>
                 <Text style={styles.text}>
@@ -38,6 +36,17 @@ const IndexScreen = ({ navigation }) => {
       />
     </View>
   );
+};
+
+IndexScreen.navigationOptions = ({ navigation }) => {
+  //yukardaki gibi başka sayfaya geçerken navigation props unu vermem lazım
+  return {    //burda bir nesne geri döndürüyorum
+    headerRight: () => (
+      <TouchableOpacity  onPress={() => navigation.navigate("Create")}>
+        <Entypo style={styles.icon} name="circle-with-plus" size={24} color="black" />
+      </TouchableOpacity>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +65,9 @@ const styles = StyleSheet.create({
   head: {
     flex: 1,
   },
+  icon: {
+    margin: 10,
+  }
 });
 
 export default IndexScreen;
