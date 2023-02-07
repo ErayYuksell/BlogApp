@@ -1,23 +1,38 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { Context } from "./context/BlogContext";
 import { Entypo } from "@expo/vector-icons";
 
-const IndexScreen = () => {
-  const { state, addBlogPost } = useContext(Context);
+const IndexScreen = ({ navigation }) => {
+  const { state, addBlogPost, deleteBlogPost } = useContext(Context);
 
   return (
-    <View>
+    <View style={styles.head}>
       <Button title="Add Post" onPress={addBlogPost} />
       <FlatList
         data={state}
         keyExtractor={(blogPost) => blogPost.title}
         renderItem={({ item }) => {
           return (
-            <View style={styles.container}>
-              <Text style={styles.text}>{item.title}</Text>
-              <Entypo name="trash" size={24} color="black" />
-            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Show", { id: item.id })}
+            >
+              <View style={styles.container}>
+                <Text style={styles.text}>
+                  {item.title} - {item.id}
+                </Text>
+                <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+                  <Entypo name="trash" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
           );
         }}
       />
@@ -36,8 +51,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
+  head: {
+    flex: 1,
+  },
 });
 
 export default IndexScreen;
