@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,22 @@ import { Context } from "./context/BlogContext";
 import { Entypo } from "@expo/vector-icons";
 
 const IndexScreen = ({ navigation }) => {
-  const { state, deleteBlogPost } = useContext(Context);
+  const { state, deleteBlogPost, getBlogPost } = useContext(Context);
+
+  // getBlogPost(); // buraya yazmamızın nedeni component oluşmaya başlar başlamaz blog gönderilerini al
+  // ancak bu burda kalırsa sonsuz döngüye gireriz her render edildiğinde tekrar render atar  çünkü
+
+  useEffect(() => {
+    getBlogPost();
+    navigation.addListener("didFocus", () => {
+      //index ekranında bir şekilde görü döndüğünde yeniden blogpost u yazdırıcak ekrana
+      getBlogPost();
+      return () => {
+        //bu ekran tamamen kaldırıldığında listener lar gibi ram yiyen şeyler kalksın diye yapılır
+        listener.remove();
+      };
+    });
+  }, []);
 
   return (
     <View style={styles.head}>
@@ -40,10 +55,16 @@ const IndexScreen = ({ navigation }) => {
 
 IndexScreen.navigationOptions = ({ navigation }) => {
   //yukardaki gibi başka sayfaya geçerken navigation props unu vermem lazım
-  return {    //burda bir nesne geri döndürüyorum
+  return {
+    //burda bir nesne geri döndürüyorum
     headerRight: () => (
-      <TouchableOpacity  onPress={() => navigation.navigate("Create")}>
-        <Entypo style={styles.icon} name="circle-with-plus" size={24} color="black" />
+      <TouchableOpacity onPress={() => navigation.navigate("Create")}>
+        <Entypo
+          style={styles.icon}
+          name="circle-with-plus"
+          size={24}
+          color="black"
+        />
       </TouchableOpacity>
     ),
   };
@@ -67,7 +88,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     margin: 10,
-  }
+  },
 });
 
 export default IndexScreen;
